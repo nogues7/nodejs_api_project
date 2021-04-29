@@ -1,0 +1,11 @@
+{
+  "name": "nodejs_api_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nogues7/nodejs_api_project.git",
+  "author": "Nogues <nogues2013@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
