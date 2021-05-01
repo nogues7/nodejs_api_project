@@ -1,5 +1,8 @@
 // Require express
 const express = require('express');
+// Require bodyparser
+var bodyParser = require('body-parser');
+
 // Use express
 const app = express();
 const port = 3000;
@@ -10,10 +13,15 @@ const projects = [];
 // Listen for reqs
 app.listen(port);
 
+// Body Parser JSON to understand req
+app.use(bodyParser.json());
+
+
 // POST - Insert new project
 app.post('/projects', (req, res) => {
     // Get the values of body
-    const {id, name} = req.body;
+    const id = req.body.id;
+    const name = req.body.name;
     // Put in array
     const project = {
         id,
@@ -34,7 +42,7 @@ app.get('/projects', (req, res) => {
 });
 
 // PUT - Update a project
-app.put('/projects/:id', (req, res) => {
+app.put('/projects/:id', checkProjectExists, (req, res) => {
     // Get id from url and name of body
     const {id} = req.params;
     const {name} = req.body;
@@ -48,7 +56,7 @@ app.put('/projects/:id', (req, res) => {
 })
 
 // DELETE - Delete a project
-app.delete('/projects/:id', (req, res) => {
+app.delete('/projects/:id', checkProjectExists, (req, res) => {
     // Get id from url and name of body
     const {id} = req.params;
     // Find the projectIndex by id
@@ -59,3 +67,27 @@ app.delete('/projects/:id', (req, res) => {
     // Return
     return res.send();
 });
+
+// Middleware Functions
+function countRequests(req, res, next){
+    // Count the number of requisitions
+    console.count('Numer of requisitions');
+
+    // Go for next function
+    return next();
+}
+
+function checkProjectExists(req, res, next){
+    // Get id from url and name of body
+    const {id} = req.params;
+
+    // Find the project in projects array by id
+    const project = projects.find(p => p.id == id);
+
+    // If project not found
+    if(!project)
+        return res.status(400).json({error: "Project not found!"});
+
+    // Go for next function
+    return next();
+}
