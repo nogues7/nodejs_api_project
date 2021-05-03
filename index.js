@@ -69,14 +69,6 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
 });
 
 // Middleware Functions
-function countRequests(req, res, next){
-    // Count the number of requisitions
-    console.count('Numer of requisitions');
-
-    // Go for next function
-    return next();
-}
-
 function checkProjectExists(req, res, next){
     // Get id from url and name of body
     const {id} = req.params;
