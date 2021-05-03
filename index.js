@@ -2,6 +2,11 @@
 const express = require('express');
 // Require bodyparser
 var bodyParser = require('body-parser');
+// Uses dotenv to use enviroment variables in .env
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 
 // Use express
 const app = express();
