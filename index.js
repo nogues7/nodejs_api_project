@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 
 // POST - Insert new project
-app.post('/projects', (req, res) => {
+app.post('/projects', checkProjectCreated, (req, res) => {
     // Get the values of body
     const id = req.body.id;
     const name = req.body.name;
@@ -87,6 +87,21 @@ function checkProjectExists(req, res, next){
     // If project not found
     if(!project)
         return res.status(400).json({error: "Project not found!"});
+
+    // Go for next function
+    return next();
+}
+
+function checkProjectCreated(req, res, next){
+    // Get id from url and name of body
+    const {id} = req.body;
+
+    // Find the project in projects array by id
+    const project = projects.find(p => p.id == id);
+
+    // If project found
+    if(project)
+        return res.status(400).json({error: "Project already Created!"});
 
     // Go for next function
     return next();
