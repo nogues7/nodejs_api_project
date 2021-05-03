@@ -98,3 +98,10 @@ function checkProjectCreated(req, res, next){
     // Go for next function
     return next();
 }
+
+// TO DO LIST
+// PUT MONGOOSE IN PROJECT TO STORE DATA AT MONGODB
+// Validate params of req in POST, PUT, DELETE <<< SEE ANYTHING LIKE POST SCHEMA
+// New method GET projects/:id to grab only one project info
+// New method PUT projects/:id/task to add new task to project
+// New method DELETE projects/:id/task/:id to delete a task
