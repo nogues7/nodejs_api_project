@@ -2,11 +2,16 @@
 const express = require('express');
 // Require bodyparser
 var bodyParser = require('body-parser');
+// Require mongoose
+const mongoose = require('mongoose');
 // Uses dotenv to use enviroment variables in .env
 const dotenv = require('dotenv');
 dotenv.config();
 
-
+// Mongo DB Connection
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => {console.log('DB Connected')})
+.catch(err => console.log(err));
 
 // Use express
 const app = express();
