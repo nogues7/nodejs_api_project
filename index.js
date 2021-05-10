@@ -65,6 +65,7 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
     // Get id from url and name of body
     const {id} = req.params;
     const {name} = req.body;
+
     // Find the project in projects array by id
     const project = projects.find(p => p.id == id);
     // Update the project name
@@ -78,10 +79,8 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
 app.delete('/projects/:id', checkProjectExists, (req, res) => {
     // Get id from url and name of body
     const {id} = req.params;
-    // Find the projectIndex by id
-    const projectIndex = projects.findIndex(p => p.id == id);
-    // Remove the project from the projects array
-    projects.splice(projectIndex, 1);
+    // Find the projectIndex by _id and Remove
+    Project.findByIdAndDelete(12).exec();
 
     // Return
     return res.send();
@@ -90,14 +89,14 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
 // Middleware Functions
 function checkProjectExists(req, res, next){
     // Get id from url and name of body
-    const {id} = req.params;
+    /*const {id} = req.params;
 
     // Find the project in projects array by id
     const project = projects.find(p => p.id == id);
 
     // If project not found
     if(!project)
-        return res.status(400).json({error: "Project not found!"});
+        return res.status(400).json({error: "Project not found!"});*/
 
     // Go for next function
     return next();
