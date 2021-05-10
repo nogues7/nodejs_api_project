@@ -62,16 +62,21 @@ app.get('/projects', (req, res) => {
 
 // PUT - Update a project
 app.put('/projects/:id', checkProjectExists, (req, res) => {
-    // Get id from url and name of body
+    // Get id from url
     const {id} = req.params;
-    const {name} = req.body;
+    // Get id from url and name of body
+    const project = {
+        id: id,
+        name: req.body.name,
+        tasks: ''
+    };
 
     // Find the project in projects array by _id
-    Project.updateOne({'id': id}, {}, (err, obj) => {
+    Project.updateOne({'id': id}, project, (err, obj) => {
         // Throws error
         if(err) throw err;
         // Return
-        return res.send();
+        return res.status(200).json(Project);
     });
 
     // Return the project array
@@ -80,7 +85,7 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
 
 // DELETE - Delete a project
 app.delete('/projects/:id', checkProjectExists, (req, res) => {
-    // Get id from url and name of body
+    // Get id from url
     const {id} = req.params;
     // Find the projectIndex by _id and Remove
     Project.deleteOne({'id': id}, (err, obj) => {
