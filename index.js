@@ -66,10 +66,13 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
     const {id} = req.params;
     const {name} = req.body;
 
-    // Find the project in projects array by id
-    const project = projects.find(p => p.id == id);
-    // Update the project name
-    project.name = name;
+    // Find the project in projects array by _id
+    Project.updateOne({'id': id}, {}, (err, obj) => {
+        // Throws error
+        if(err) throw err;
+        // Return
+        return res.send();
+    });
 
     // Return the project array
     return res.json(project);
@@ -80,10 +83,12 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
     // Get id from url and name of body
     const {id} = req.params;
     // Find the projectIndex by _id and Remove
-    Project.findByIdAndDelete(12).exec();
-
-    // Return
-    return res.send();
+    Project.deleteOne({'id': id}, (err, obj) => {
+        // Throws error
+        if(err) throw err;
+        // Return
+        return res.status(200).json({'message': 'Project Deleted'});
+    });
 });
 
 // Middleware Functions
