@@ -13,6 +13,15 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 .then(() => {console.log('DB Connected')})
 .catch(err => console.log(err));
 
+// Project Schema
+var Schema = mongoose.Schema;
+var projectDataSchema = new Schema({
+    id: {type: String, required: true},
+    name: {type: String, required: true},
+    tasks: String
+});
+var Project = mongoose.model('ProjectData', projectDataSchema);
+
 // Use express
 const app = express();
 const port = 3000;
@@ -29,26 +38,26 @@ app.use(bodyParser.json());
 
 // POST - Insert new project
 app.post('/projects', checkProjectCreated, (req, res) => {
-    // Get the values of body
-    const id = req.body.id;
-    const name = req.body.name;
-    // Put in array
+    // Put in array values of body
     const project = {
-        id,
-        name,
-        tasks: []
+        id: req.body.id,
+        name: req.body.name,
+        tasks: ''
     };
-    // Push in projects
-    projects.push(project);
+    // Save project in mongo
+    var projectMongo = new Project(project);
+    projectMongo.save();
 
     // Return the project array
-    return res.json(project);
+    return res.status(200).json(project);
 });
 
 // GET - Return all projects
 app.get('/projects', (req, res) => {
-    // Return all projects
-    return res.json(projects);
+    Project.find().then((doc) => {
+        // Return all projects
+        return res.status(200).json({items: doc});
+    });
 });
 
 // PUT - Update a project
