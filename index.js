@@ -35,9 +35,13 @@ app.listen(port);
 // Body Parser JSON to understand req
 app.use(bodyParser.json());
 
+// Using express validator
+const expressValidator = require('express-validator');
+app.use(expressValidator());
+const validator = require('./helpers/');
 
 // POST - Insert new project
-app.post('/projects', checkProjectCreated, (req, res) => {
+app.post('/projects', validator.checkProjectPostValidator, checkProjectCreated, (req, res) => {
     // Put in array values of body
     const project = {
         id: req.body.id,
@@ -61,7 +65,7 @@ app.get('/projects', (req, res) => {
 });
 
 // PUT - Update a project
-app.put('/projects/:id', checkProjectExists, (req, res) => {
+app.put('/projects/:id', validator.checkProjectPostValidator, checkProjectExists, (req, res) => {
     // Get id from url
     const {id} = req.params;
     // Get id from url and name of body
@@ -83,7 +87,7 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
 
     // Return the project array
     return res.json(project);
-})
+});
 
 // DELETE - Delete a project
 app.delete('/projects/:id', checkProjectExists, (req, res) => {
@@ -93,7 +97,7 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
     Project.deleteOne({'id': id}, (err, obj) => {
         // Throws error
         if(err)
-            throw err;
+            return res.status(400).json(err);
 
             // Return
         return res.status(200).json({'message': 'Project Deleted'});
@@ -126,6 +130,8 @@ function checkProjectCreated(req, res, next){
             return next();
     });
 }
+
+
 
 // TO DO LIST
 // Validate params of req in POST, PUT, DELETE <<< SEE ANYTHING LIKE POST SCHEMA
