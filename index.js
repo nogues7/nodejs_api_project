@@ -74,7 +74,9 @@ app.put('/projects/:id', checkProjectExists, (req, res) => {
     // Find the project in projects array by _id
     Project.updateOne({'id': id}, project, (err, obj) => {
         // Throws error
-        if(err) throw err;
+        if(err)
+            return res.status(400).json(err);
+
         // Return
         return res.status(200).json(Project);
     });
@@ -90,8 +92,10 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
     // Find the projectIndex by _id and Remove
     Project.deleteOne({'id': id}, (err, obj) => {
         // Throws error
-        if(err) throw err;
-        // Return
+        if(err)
+            throw err;
+
+            // Return
         return res.status(200).json({'message': 'Project Deleted'});
     });
 });
@@ -99,36 +103,31 @@ app.delete('/projects/:id', checkProjectExists, (req, res) => {
 // Middleware Functions
 function checkProjectExists(req, res, next){
     // Get id from url and name of body
-    /*const {id} = req.params;
+    const {id} = req.params;
 
-    // Find the project in projects array by id
-    const project = projects.find(p => p.id == id);
-
-    // If project not found
-    if(!project)
-        return res.status(400).json({error: "Project not found!"});*/
-
-    // Go for next function
-    return next();
+    Project.findOne({'id': id}).then((doc) => {
+        // Go for next function
+        if(doc)
+            return next();
+        else
+            return res.status(400).json({error: "Project doesn't Exists!"});
+    });
 }
 
 function checkProjectCreated(req, res, next){
     // Get id from url and name of body
     const {id} = req.body;
 
-    // Find the project in projects array by id
-    const project = projects.find(p => p.id == id);
-
-    // If project found
-    if(project)
-        return res.status(400).json({error: "Project already Created!"});
-
-    // Go for next function
-    return next();
+    Project.findOne({'id': id}).then((doc) => {
+        // Go for next function
+        if(doc)
+            return res.status(400).json({error: "Project already Created!"});
+        else
+            return next();
+    });
 }
 
 // TO DO LIST
-// PUT MONGOOSE IN PROJECT TO STORE DATA AT MONGODB
 // Validate params of req in POST, PUT, DELETE <<< SEE ANYTHING LIKE POST SCHEMA
 // New method GET projects/:id to grab only one project info
 // New method PUT projects/:id/task to add new task to project
