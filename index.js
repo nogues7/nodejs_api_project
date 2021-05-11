@@ -131,10 +131,7 @@ function checkProjectCreated(req, res, next){
     });
 }
 
-
-
 // TO DO LIST
-// Validate params of req in POST, PUT, DELETE <<< SEE ANYTHING LIKE POST SCHEMA
 // New method GET projects/:id to grab only one project info
 // New method PUT projects/:id/task to add new task to project
 // New method DELETE projects/:id/task/:id to delete a task
